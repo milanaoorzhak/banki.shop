@@ -1,69 +1,76 @@
 <template>
-  <div class="painting">
-    <img :src="img" alt="painting" />
+  <div :class="['painting', { 'sold': !hasPrices }]">
+    <img :src="painting.img" alt="painting" @click="openModal" />
     <div class="painting-info">
-      <p class="painting-title">
-        <span>{{ title }}</span>
-        <span>{{ author }}</span>
+      <p class="painting-title" @click="openModal">
+        <span>{{ painting.title }}</span>
+        <span>{{ painting.author }}</span>
       </p>
-      <div class="painting-about-buy">
+      <div class="painting-about-buy" v-if="hasPrices">
         <div class="painting-prices">
-          <span class="painting-old-price">{{ oldPrice }}</span>
-          <span class="painting-new-price">{{ newPrice }}</span>
+          <span class="painting-old-price">{{ painting.oldPrice }}</span>
+          <span class="painting-new-price">{{ painting.newPrice }}</span>
         </div>
         <Button :text="buttonText" @click="handleClick"></Button>
       </div>
+      <div class="painting-about-buy" v-else>
+        <p class="sold-message">Продана на аукционе</p>
+      </div>
     </div>
+
+    <Modal :painting="painting" :isOpen="isModalOpen" @close="isModalOpen = false" />
   </div>
 </template>
 
 <script>
 import Button from "./Button";
+import Modal from './Modal.vue';
+import { mapState, mapActions } from 'vuex';
+
 export default {
   name: "Painting",
   props: {
-    img: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    author: {
-      type: String,
-      required: true,
-    },
-    oldPrice: {
-      type: String,
-      required: false,
-    },
-    newPrice: {
-      type: String,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      buttonText: "Купить",
-      isProcessing: false,
-    };
-  },
-  methods: {
-    handleClick() {
-      if (this.isProcessing) return;
-
-      this.buttonText = "Обрабатывается";
-      this.isProcessing = true;
-
-      setTimeout(() => {
-        this.buttonText = "✓ В корзине";
-        this.isProcessing = false;
-      }, 2000);
+    painting: {
+      type: Object,
     },
   },
   components: {
     Button,
+    Modal,
+  },
+  data() {
+    return {
+      isModalOpen: false
+    };
+  },
+  computed: {
+    hasPrices() {
+      return this.painting.oldPrice || this.painting.newPrice;
+    },
+    buttonText() {
+      return this.$store.getters.getCartState(this.painting.title);
+    }
+  },
+  methods: {
+    ...mapActions([
+      'addToCart',
+      'setProcessing',
+      'resetState'
+    ]),
+
+    handleClick() {
+      if (this.buttonText === 'Обрабатывается') return;
+
+      this.setProcessing(this.painting.title);
+
+      setTimeout(() => {
+        this.addToCart(this.painting.title);
+      }, 2000);
+    },
+
+    openModal() {
+      this.isModalOpen = true;
+    },
   },
 };
 </script>
@@ -71,6 +78,11 @@ export default {
 <style scoped>
 .painting {
   border: 1px solid #e1e1e1;
+  margin-bottom: 20px;
+}
+
+.sold {
+  opacity: 0.5;
 }
 
 .painting-info {
@@ -115,5 +127,11 @@ export default {
   align-content: center;
   align-items: center;
   margin-top: 22px;
+}
+
+@media (max-width: 600px) {
+  .painting {
+    margin-bottom: 20px;
+  }
 }
 </style>

@@ -27,4 +27,14 @@ export default {
 .nav-item:last-child {
   margin-right: 0;
 }
+
+@media (max-width: 600px) {
+  .nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    padding-left: 10px;
+  }
+}
 </style>

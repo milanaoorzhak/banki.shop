@@ -4,15 +4,11 @@
     <div class="contacts">
       <div class="contacts-item">
         <img class="contacts-item-img" src="../assets/phone.svg" />
-        <a class="contacts-item-link" href="tel:+7(812)555-55-55"
-          >+7 (812) 555-55-555</a
-        >
+        <a class="contacts-item-link" href="tel:+7(812)555-55-55">+7 (812) 555-55-555</a>
       </div>
       <div class="contacts-item">
         <img class="contacts-item-img" src="../assets/address.svg" />
-        <a class="contacts-item-link" href="#"
-          >г. Санкт-Петербург, ул. Ефимова, 3</a
-        >
+        <a class="contacts-item-link" href="#">г. Санкт-Петербург, ул. Ефимова, 3</a>
       </div>
     </div>
   </footer>
@@ -38,6 +34,7 @@ export default {
 .footer {
   padding: 0 calc(50% - 1200px / 2);
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #e1e1e1;
@@ -74,5 +71,25 @@ export default {
   line-height: 21px;
   color: #555555;
   text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .footer {
+    flex-direction: column;
+  }
+
+  .contacts {
+    width: 100%;
+    flex-direction: column;
+    padding-left: 10px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .footer {
+    justify-content: center;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 </style>
