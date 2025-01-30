@@ -1,24 +1,33 @@
 <template>
-  <section class="paintings">
-    <Painting
-      v-for="(painting, index) in paintings"
-      :key="index"
-      :img="painting.img"
-      :title="painting.title"
-      :author="painting.author"
-      :oldPrice="painting.oldPrice"
-      :newPrice="painting.newPrice"
-    />
+  <section>
+    <div class="paintings" v-if="filteredPaintings.length">
+      <Painting
+        v-for="(painting, index) in filteredPaintings"
+        :key="index"
+        :img="painting.img"
+        :title="painting.title"
+        :author="painting.author"
+        :oldPrice="painting.oldPrice"
+        :newPrice="painting.newPrice"
+      />
+    </div>
+    <p v-else>Ничего не найдено</p>
   </section>
 </template>
 
 <script>
 import Painting from "./Painting";
+import { mapState } from "vuex";
+
 export default {
   name: "Paintings",
-  data() {
-    return {
-      paintings: [
+  components: {
+    Painting,
+  },
+  computed: {
+    ...mapState(["searchQuery"]),
+    paintings() {
+      return [
         {
           img: require("@/assets/venus.png"),
           title: "«Рождение Венеры»",
@@ -47,11 +56,17 @@ export default {
           oldPrice: "",
           newPrice: "",
         },
-      ],
-    };
-  },
-  components: {
-    Painting,
+      ];
+    },
+    filteredPaintings() {
+      if (!this.searchQuery) return this.paintings;
+      const query = this.searchQuery.toLowerCase();
+      return this.paintings.filter(
+        (painting) =>
+          painting.title.toLowerCase().includes(query) ||
+          painting.author.toLowerCase().includes(query)
+      );
+    },
   },
 };
 </script>

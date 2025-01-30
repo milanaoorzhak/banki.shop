@@ -1,8 +1,14 @@
 <template>
-  <button class="btn">Найти</button>
+  <button @click="$emit('click')" class="btn">{{text}}</button>
 </template>
 
-<script></script>
+<script>
+export default {
+  name: "Button",
+  props: {
+    text: String
+  },
+};</script>
 
 <style scoped>
 .btn {
@@ -11,6 +17,13 @@
   line-height: 21px;
   color: #ffffff;
   background-color: #403432;
-  padding: 14px 31px;
+  min-width: 118px;
+  height: 48px;
+  text-align: center;
+  border: none;
+}
+
+.btn:hover {
+  background-color: #776763;
 }
 </style>

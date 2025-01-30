@@ -1,12 +1,31 @@
 <template>
   <div class="search-container">
-    <input type="text" placeholder="Поиск по названию картины" />
-    <button type="button">Найти</button>
+    <input v-model="searchQuery" type="text" placeholder="Поиск по названию картины" />
+    <Button @click="updateSearch" text="Найти"></Button>
   </div>
 </template>
 
 <script>
-import Button from "./Button";
+import Button from "./Button.vue";
+
+export default {
+  components: { Button },
+  computed: {
+    searchQuery: {
+      get() {
+        return this.$store.state.searchQuery;
+      },
+      set(value) {
+        this.$store.commit("setSearchQuery", value);
+      },
+    },
+  },
+  methods: {
+    updateSearch() {
+      this.$store.commit("setSearchQuery", this.searchQuery);
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -29,13 +48,7 @@ import Button from "./Button";
   outline: none;
 }
 
-.search-container button {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 21px;
-  color: #fff;
-  border: none;
-  padding: 14px 36px;
-  background: #403432;
+.search-container input:active {
+  outline: 1px solid #B5B5B5
 }
 </style>

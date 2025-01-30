@@ -11,7 +11,7 @@
           <span class="painting-old-price">{{ oldPrice }}</span>
           <span class="painting-new-price">{{ newPrice }}</span>
         </div>
-        <Button />
+        <Button :text="buttonText" @click="handleClick"></Button>
       </div>
     </div>
   </div>
@@ -41,6 +41,25 @@ export default {
     newPrice: {
       type: String,
       required: true,
+    },
+  },
+  data() {
+    return {
+      buttonText: "Купить",
+      isProcessing: false,
+    };
+  },
+  methods: {
+    handleClick() {
+      if (this.isProcessing) return;
+
+      this.buttonText = "Обрабатывается";
+      this.isProcessing = true;
+
+      setTimeout(() => {
+        this.buttonText = "✓ В корзине";
+        this.isProcessing = false;
+      }, 2000);
     },
   },
   components: {
