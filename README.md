@@ -1,6 +1,9 @@
 # banki.shop
 
-> A Vue.js project
+Для запуска проекта введите в терминале следующие команды:
+1) npm install
+2) npm run dev
+3) Введите в командной строке браузера localhost:8080
 
 ## Build Setup
 
